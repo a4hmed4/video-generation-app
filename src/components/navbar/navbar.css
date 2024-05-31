@@ -1,0 +1,169 @@
+.vga__navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: right;
+    padding: 2rem 6rem;
+        
+}
+
+
+
+.vga__navbar-links {
+    flex: 3;
+    display: flex;
+    justify-content: flex-start;
+    align-items: right;
+}
+
+.vga__navbar-links_logo {
+    margin-right: 2rem;
+}
+
+.vga__navbar-links_logo img {
+    width: 82.56px;
+    height: 75.02px;
+}
+
+.vga__navbar-links_container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 2rem;
+    margin-left: auto;
+}
+
+.vga__navbar-sign {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.vga__navbar-links_container p,
+.vga__navbar-sign p,
+.vga__navbar-menu_container p {
+    color: #88d2f5;
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    text-transform: capitalize;
+    margin: 0 1rem;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.vga__navbar-links_container p::after,
+.vga__navbar-sign p::after,
+.vga__navbar-menu_container p::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    display: block;
+    margin-top: 5px;
+    right: 0;
+    background: #df90f3;
+    transition: width 0.3s ease;
+    -webkit-transition: width 0.3s ease;
+}
+
+.vga__navbar-links_container p:hover::after,
+.vga__navbar-sign p:hover::after,
+.vga__navbar-menu_container p:hover::after {
+    width: 100%;
+    left: 0;
+    background: #df90f3; 
+}
+
+.vga__navbar-links_container p:active,
+.vga__navbar-sign p:active,
+.vga__navbar-menu_container p:active {
+    color: #df90f3; 
+}
+
+
+.vga__navbar-sign button,
+.vga__navbar-menu_container button {
+    padding: 0.5rem 1rem;
+    color: #fff;
+    background: #FF4820;
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.vga__navbar-menu {
+    margin-left: 1rem;
+
+    display: none;
+    position: relative;
+}
+
+.vga__navbar-menu svg {
+    cursor: pointer;
+}
+
+.vga__navbar-menu_container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    flex-direction: column;
+    
+    text-align: end;
+    background: var(--color-footer);
+    padding: 2rem;
+    position: absolute;
+    right: 0;
+    top: 40px;
+    margin-top: 1rem;
+    min-width: 200px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0,0, 0,0.2);
+}
+
+.vga__navbar-menu_container p {
+    margin: 1rem 0;
+}
+
+.vga__navbar-menu_container-links-sign {
+    display: none;
+}
+
+@media screen and (max-width: 1050px) {
+    .vga__navbar-links_container {
+        display: none;
+    }
+
+    .vga__navbar-menu {
+        display: flex;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .vga__navbar {
+        padding: 2rem 4rem;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .vga__navbar {
+        padding: 2rem;
+    }
+
+    .vga__navbar-sign {
+        display: none;
+    }
+
+    .vga__navbar-menu_container {
+        top: 20px;
+    }
+
+    .vga__navbar-menu_container-links-sign {
+        display: block;
+    }
+}
