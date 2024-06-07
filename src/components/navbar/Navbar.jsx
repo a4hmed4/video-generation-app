@@ -15,10 +15,10 @@ const Navbar = () => {
         </div>
         <div className="vga__navbar-links_container">
           <p><a href="#home">Home</a></p>
-          <p><a href="#team">our team</a></p>
           <p><a href="#vga">About</a></p>
           <p><a href="#features">Features</a></p>
           <p><a href="#application">App</a></p>
+          <p><a href="#team">our team</a></p>
           <p><a href="#blog">Doc</a></p>
         </div>
       </div>
@@ -34,10 +34,10 @@ const Navbar = () => {
         <div className="vga__navbar-menu_container scale-up-center">
           <div className="vga__navbar-menu_container-links">
           <p><a href="#home">Home</a></p>
-          <p><a href="#team">our team</a></p>
           <p><a href="#vga">About</a></p>
           <p><a href="#features">Features</a></p>
           <p><a href="#application">App</a></p>
+          <p><a href="#team">our team</a></p>
           <p><a href="#possibility">Doc</a></p>
           </div>
 {/*           <div className="gpt3__navbar-menu_container-links-sign">
