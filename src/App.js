@@ -12,11 +12,10 @@ const App = () => (
       <Header />
     </div>
     <Brand />
-    <Team />
     <WhatVGA />
     <Features />
     <Application />
-    <CTA />
+    <Team />
     <Blog />
     <Footer />
   </div>
