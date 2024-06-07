@@ -4,4 +4,6 @@ export { default as Footer } from './footer/Footer';
 export { default as Header } from './header/Header';
 export { default as Application } from './application/Application';
 export { default as WhatVGA } from './whatVGA/WhatVGA';
+export { default as Team } from './team/Team';
+
 
