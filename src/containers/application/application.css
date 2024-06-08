@@ -199,6 +199,7 @@
 @media (max-width: 768px) {
 
     .content-box,
+    .generated-video-box,
     .generated-video-box {
         flex: 1 1 100%;
         margin: 10px 0;
@@ -207,15 +208,17 @@
 
 @media (max-width: 480px) {
     .option-buttons button {
-        font-size: 14px;
-        padding: 6px 12px;
+        font-size: 12px;
+        padding: 5px 11px;
     }
 
     .generate-button {
         font-size: 16px;
         padding: 8px 16px;
     }
-
+    .generated-video-box .content-box {
+        display: flex;
+    }
     .generated-video-box .video-content {
         height: 200px;
     }
