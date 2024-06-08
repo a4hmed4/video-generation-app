@@ -24,7 +24,7 @@ const team = () => (
                 )}
             />
             <Feature
-                title="Work time"
+                title="Enterprise"
                 text={(
                     <>
                         Delta University for Science and Technology <br />
