@@ -12,7 +12,7 @@ const Header = () => (
 
       <div className="vga__header-content__input">
         {/* <input type="email" placeholder="Your Email Address" /> */}
-        <button type="button"><a href="#features">Get Started</a></button>
+        <button type="button"><a href="#application">Get Started</a></button>
       </div>
 
 {/*       <div className="gpt3__header-content__people">
