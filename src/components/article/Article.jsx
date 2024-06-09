@@ -11,7 +11,7 @@ const Article = ({ imgUrl, date, text }) => (
         <p>{date}</p>
         <h3>{text}</h3>
       </div>
-      <p><a href="#home">Read Full Documentation</a></p>
+      <p><a href="https://drive.google.com/file/d/175YPIO5CXLBZGfObSeLRZXLU1v5aTD1q/view?usp=sharing">Read Full Documentation</a></p>
     </div>
   </div>
 );

@@ -4,12 +4,15 @@ import axios from 'axios';
 
 const Application = () => {
   const [selectedOption, setSelectedOption] = useState(null);
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const [audioFile, setAudioFile] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedAudio, setUploadedAudio] = useState(null);
   const [textInput, setTextInput] = useState('');
   const [generatedVideo, setGeneratedVideo] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedAudio, setSelectedAudio] = useState(null);
   const [images, setImages] = useState([]);
   const [audios, setAudios] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (selectedOption === 'image') {
@@ -39,16 +42,22 @@ const Application = () => {
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
+    setUploadedImage(null);
+    setUploadedAudio(null);
+    setSelectedImage(null);
+    setSelectedAudio(null);
   };
 
-  const handleFileUpload = (event) => {
+  const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    setUploadedFile(file);
+    setUploadedImage(file);
+    setSelectedImage(null);
   };
 
   const handleAudioUpload = (event) => {
     const file = event.target.files[0];
-    setAudioFile(file);
+    setUploadedAudio(file);
+    setSelectedAudio(null);
   };
 
   const handleTextInputChange = (event) => {
@@ -56,22 +65,35 @@ const Application = () => {
   };
 
   const handleGenerate = async () => {
-    if (selectedOption === 'image' && uploadedFile && audioFile) {
+    if (selectedOption === 'image' && (uploadedImage || selectedImage) && (uploadedAudio || selectedAudio)) {
       const formData = new FormData();
-      formData.append('image', uploadedFile);
-      formData.append('audio', audioFile);
+      formData.append('image', uploadedImage || selectedImage);
+      formData.append('audio', uploadedAudio || selectedAudio);
 
       try {
+        setLoading(true);
         const response = await axios.post('http://127.0.0.1:8000/generate_video/', formData, {
           responseType: 'blob',
         });
         const videoBlob = new Blob([response.data], { type: 'video/mp4' });
         const videoUrl = URL.createObjectURL(videoBlob);
         setGeneratedVideo(videoUrl);
+        setLoading(false);
       } catch (error) {
         console.error('Error generating video:', error);
+        setLoading(false);
       }
     }
+  };
+
+  const handleImageSelect = (image) => {
+    setSelectedImage(image === selectedImage ? null : image);
+    setUploadedImage(null);
+  };
+
+  const handleAudioSelect = (audio) => {
+    setSelectedAudio(audio === selectedAudio ? null : audio);
+    setUploadedAudio(null);
   };
 
   const renderOptionContent = () => {
@@ -81,10 +103,16 @@ const Application = () => {
           <div className="content-title">Group of Images</div>
           <div className="content-body images-grid">
             {images.map((image, index) => (
-              <img key={index} src={`http://127.0.0.1:8000/images/${image}`} alt={image} />
+              <img
+                key={index}
+                src={`http://127.0.0.1:8000/images/${image}`}
+                alt={image}
+                className={selectedImage === image ? 'selected-image' : ''}
+                onClick={() => handleImageSelect(image)}
+              />
             ))}
           </div>
-          <input type="file" accept="image/*" onChange={handleFileUpload} />
+          <input type="file" accept="image/*" onChange={handleImageUpload} />
         </div>
       );
     } else if (selectedOption === 'speech') {
@@ -93,7 +121,11 @@ const Application = () => {
           <div className="content-title">Group of Voices</div>
           <div className="content-body audio-list">
             {audios.map((audio, index) => (
-              <div key={index}>
+              <div
+                key={index}
+                className={`audio-item ${selectedAudio === audio ? 'selected-audio' : ''}`}
+                onClick={() => handleAudioSelect(audio)}
+              >
                 <audio controls>
                   <source src={`http://127.0.0.1:8000/audio/${audio}`} type="audio/wav" />
                 </audio>
@@ -139,12 +171,15 @@ const Application = () => {
             <button className="generate-button" onClick={handleGenerate}>
               Generate
             </button>
+            {loading && <div className="loader">Loading...</div>}
           </div>
         </div>
         <div className="generated-video-box">
           <div className="video-title">Generated Video</div>
           <div className="video-content">
-            {generatedVideo ? (
+            {loading ? (
+              <div className="loader">Loading...</div>
+            ) : generatedVideo ? (
               <video controls>
                 <source src={generatedVideo} type="video/mp4" />
               </video>
