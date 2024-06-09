@@ -19,7 +19,7 @@ const Navbar = () => {
           <p><a href="#features">Features</a></p>
           <p><a href="#application">App</a></p>
           <p><a href="#team">team</a></p>
-          <p><a href="#blog">Doc</a></p>
+          <p><a href="#article">Doc</a></p>
         </div>
       </div>
 {/*       <div className="gpt3__navbar-sign">
@@ -38,7 +38,7 @@ const Navbar = () => {
           <p><a href="#features">Features</a></p>
           <p><a href="#application">App</a></p>
           <p><a href="#team">team</a></p>
-          <p><a href="#possibility">Doc</a></p>
+          <p><a href="#article">Doc</a></p>
           </div>
 {/*           <div className="gpt3__navbar-menu_container-links-sign">
             <p>Sign in</p>
