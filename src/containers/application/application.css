@@ -39,13 +39,53 @@
 .images-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-}
+    gap: 8px;
+    max-height: 300px; /* Adjust the height as needed */
+    overflow-y: auto; /* Add vertical scrollbar */
+  }
+  
+  .audio-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center items vertically */
+    align-items: center;  /* Center items horizontally */
+    gap: 8px;
+    max-height: 300px; /* Adjust the height as needed */
+    overflow-y: auto; /* Add vertical scrollbar */
+  }
+
+  
 
 .images-grid img {
     width: calc(25% - 10px);
     /* Four images per row with a 10px gap */
     height: auto;
+}
+
+.images-grid,
+.audio-list {
+  /* Your existing styles */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: 300px; /* Adjust the height as needed */
+  overflow-y: auto; /* Add vertical scrollbar */
+}
+
+.images-grid::-webkit-scrollbar,
+.audio-list::-webkit-scrollbar {
+  width: 12px; /* Set the width of the scrollbar */
+}
+
+.images-grid::-webkit-scrollbar-thumb,
+.audio-list::-webkit-scrollbar-thumb {
+  background-color: #888; /* Set the color of the scrollbar thumb */
+  border-radius: 6px; /* Set the border radius of the scrollbar thumb */
+}
+
+.images-grid::-webkit-scrollbar-track,
+.audio-list::-webkit-scrollbar-track {
+  background-color: transparent; /* Set the background color of the scrollbar track to transparent */
 }
 
 
