@@ -57,7 +57,6 @@ const Application = () => {
   const handleAudioUpload = (event) => {
     const file = event.target.files[0];
     setUploadedAudio(file);
-    setSelectedAudio(null);
   };
 
   const handleTextInputChange = (event) => {
@@ -65,16 +64,24 @@ const Application = () => {
   };
 
   const handleGenerate = async () => {
-    if (selectedOption === 'image' && (uploadedImage || selectedImage) && (uploadedAudio || selectedAudio)) {
+    if (
+      (selectedOption === 'image' || selectedOption == "speech") &&
+      (uploadedImage || selectedImage) &&
+      (uploadedAudio || selectedAudio)
+    ) {
       const formData = new FormData();
       formData.append('image', uploadedImage || selectedImage);
       formData.append('audio', uploadedAudio || selectedAudio);
 
       try {
         setLoading(true);
-        const response = await axios.post('http://127.0.0.1:8000/generate_video/', formData, {
-          responseType: 'blob',
-        });
+        const response = await axios.post(
+          'http://127.0.0.1:8000/generate_video/',
+          formData,
+          {
+            responseType: 'blob',
+          }
+        );
         const videoBlob = new Blob([response.data], { type: 'video/mp4' });
         const videoUrl = URL.createObjectURL(videoBlob);
         setGeneratedVideo(videoUrl);
@@ -100,7 +107,7 @@ const Application = () => {
     if (selectedOption === 'image') {
       return (
         <div className="content-section">
-          <div className="content-title">Group of Images</div>
+          <div className="content-title">Select an Image</div>
           <div className="content-body images-grid">
             {images.map((image, index) => (
               <img
@@ -118,16 +125,19 @@ const Application = () => {
     } else if (selectedOption === 'speech') {
       return (
         <div className="content-section">
-          <div className="content-title">Group of Voices</div>
+          <div className="content-title">Select an Voices</div>
           <div className="content-body audio-list">
             {audios.map((audio, index) => (
               <div
                 key={index}
-                className={`audio-item ${selectedAudio === audio ? 'selected-audio' : ''}`}
+                className={`audio-item ${selectedAudio === audio ? 'selected-audio' : ''
+                  }`}
                 onClick={() => handleAudioSelect(audio)}
               >
                 <audio controls>
-                  <source src={`http://127.0.0.1:8000/audio/${audio}`} type="audio/wav" />
+                  <source
+                    src={`http://127.0.0.1:8000/audio/${audio}`}
+                    type="audio/wav" />
                 </audio>
               </div>
             ))}
@@ -176,17 +186,25 @@ const Application = () => {
         </div>
         <div className="generated-video-box">
           <div className="video-title">Generated Video</div>
-          <div className="video-content">
-            {loading ? (
-              <div className="loader">Loading...</div>
-            ) : generatedVideo ? (
+          {/* <div className="video-content">
+            {generatedVideo ? (
               <video controls>
                 <source src={generatedVideo} type="video/mp4" />
               </video>
             ) : (
               <div className="video-placeholder">Video will be displayed here</div>
             )}
-          </div>
+          </div> */}
+          {loading ? (
+            <video controls>
+              <source src={generatedVideo} type="videp/mp4" />
+            </video>
+          ) : (
+            <div className="video-placeholder">
+              video will be displayed here
+            </div>
+          )}
+
         </div>
       </div>
     </div>
