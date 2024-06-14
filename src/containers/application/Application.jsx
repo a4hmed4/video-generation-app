@@ -3,10 +3,8 @@ import './application.css';
 import axios from 'axios';
 
 const Application = () => {
-  const [selectedOption, setSelectedOption] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [uploadedAudio, setUploadedAudio] = useState(null);
-  const [textInput, setTextInput] = useState('');
   const [generatedVideo, setGeneratedVideo] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedAudio, setSelectedAudio] = useState(null);
@@ -15,16 +13,13 @@ const Application = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (selectedOption === 'image') {
-      fetchImages();
-    } else if (selectedOption === 'speech') {
-      fetchAudios();
-    }
-  }, [selectedOption]);
+    fetchImages();
+    fetchAudios();
+  }, []);
 
   const fetchImages = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/list_images/');
+      const response = await axios.get('http://localhost:5000/list_images/');
       setImages(response.data.images);
     } catch (error) {
       console.error('Error fetching images:', error);
@@ -33,50 +28,51 @@ const Application = () => {
 
   const fetchAudios = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/list_audio/');
+      const response = await axios.get('http://localhost:5000/list_audios/');
       setAudios(response.data.audios);
     } catch (error) {
       console.error('Error fetching audios:', error);
     }
   };
 
-  const handleOptionSelect = (option) => {
-    setSelectedOption(option);
-    setUploadedImage(null);
-    setUploadedAudio(null);
-    setSelectedImage(null);
-    setSelectedAudio(null);
-  };
-
-  const handleImageUpload = (event) => {
+  const handleImageUpload = async (event) => {
     const file = event.target.files[0];
-    setUploadedImage(file);
-    setSelectedImage(null);
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const response = await axios.post('http://localhost:5000/upload_image/', formData);
+      setUploadedImage(response.data.image);
+      setSelectedImage(null);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
   };
 
-  const handleAudioUpload = (event) => {
+  const handleAudioUpload = async (event) => {
     const file = event.target.files[0];
-    setUploadedAudio(file);
-  };
+    const formData = new FormData();
+    formData.append('audio', file);
 
-  const handleTextInputChange = (event) => {
-    setTextInput(event.target.value);
+    try {
+      const response = await axios.post('http://localhost:5000/upload_audio/', formData);
+      setUploadedAudio(response.data.audio);
+      setSelectedAudio(null);
+    } catch (error) {
+      console.error('Error uploading audio:', error);
+    }
   };
 
   const handleGenerate = async () => {
-    if (
-      (selectedOption === 'image' || selectedOption == "speech") &&
-      (uploadedImage || selectedImage) &&
-      (uploadedAudio || selectedAudio)
-    ) {
+    if (selectedImage && selectedAudio) {
       const formData = new FormData();
-      formData.append('image', uploadedImage || selectedImage);
-      formData.append('audio', uploadedAudio || selectedAudio);
+      formData.append('image', selectedImage);
+      formData.append('audio', selectedAudio);
 
       try {
         setLoading(true);
         const response = await axios.post(
-          'http://127.0.0.1:8000/generate_video/',
+          'http://localhost:5000/generate_video/',
           formData,
           {
             responseType: 'blob',
@@ -90,6 +86,8 @@ const Application = () => {
         console.error('Error generating video:', error);
         setLoading(false);
       }
+    } else {
+      alert('Please select both an image and an audio.');
     }
   };
 
@@ -103,90 +101,56 @@ const Application = () => {
     setUploadedAudio(null);
   };
 
-  const renderOptionContent = () => {
-    if (selectedOption === 'image') {
-      return (
-        <div className="content-section">
-          <div className="content-title">Select an Image</div>
-          <div className="content-body images-grid">
-            {images.map((image, index) => (
-              <img
-                key={index}
-                src={`http://127.0.0.1:8000/images/${image}`}
-                alt={image}
-                className={selectedImage === image ? 'selected-image' : ''}
-                onClick={() => handleImageSelect(image)}
-              />
-            ))}
-          </div>
-          <input type="file" accept="image/*" onChange={handleImageUpload} />
-        </div>
-      );
-    } else if (selectedOption === 'speech') {
-      return (
-        <div className="content-section">
-          <div className="content-title">Select an Voices</div>
-          <div className="content-body audio-list">
-            {audios.map((audio, index) => (
-              <div
-                key={index}
-                className={`audio-item ${selectedAudio === audio ? 'selected-audio' : ''
-                  }`}
-                onClick={() => handleAudioSelect(audio)}
-              >
-                <audio controls>
-                  <source
-                    src={`http://127.0.0.1:8000/audio/${audio}`}
-                    type="audio/wav" />
-                </audio>
-              </div>
-            ))}
-          </div>
-          <input type="file" accept="audio/*" onChange={handleAudioUpload} />
-          <button className="content-button">Record</button>
-        </div>
-      );
-    } else if (selectedOption === 'text') {
-      return (
-        <div className="content-section">
-          <div className="content-title">Text Input</div>
-          <div className="content-body">
-            <textarea
-              placeholder="Enter your text here"
-              value={textInput}
-              onChange={handleTextInputChange}
-            />
-            <button className="content-button" onClick={() => handleOptionSelect('speech')}>
-              Choose Speech
-            </button>
-          </div>
-        </div>
-      );
-    }
-  };
-
   return (
     <div className="vga__application section__padding" id="application">
       <div className="content-container">
         <div className="content-box">
-          <div className="option-buttons">
-            <button onClick={() => handleOptionSelect('image')}>Image</button>
-            <button onClick={() => handleOptionSelect('speech')}>Speech</button>
-            <button onClick={() => handleOptionSelect('text')}>Text</button>
-          </div>
           <div className="option-content">
-            {selectedOption && renderOptionContent()}
+            <div className="content-section">
+              <div className="content-title">Select an Image</div>
+              <div className="content-body">
+                <select
+                  value={selectedImage || ''}
+                  onChange={(e) => handleImageSelect(e.target.value)}
+                >
+                  <option value="">Select an image</option>
+                  {images.map((image, index) => (
+                    <option key={index} value={image}>
+                      {image}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <input type="file" accept="image/*" onChange={handleImageUpload} />
+            </div>
+            <div className="content-section">
+              <div className="content-title">Select a Voice</div>
+              <div className="content-body">
+                <select
+                  value={selectedAudio || ''}
+                  onChange={(e) => handleAudioSelect(e.target.value)}
+                >
+                  <option value="">Select an audio</option>
+                  {audios.map((audio, index) => (
+                    <option key={index} value={audio}>
+                      {audio}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <input type="file" accept="audio/*" onChange={handleAudioUpload} />
+            </div>
           </div>
           <div className="generate-button-container">
             <button className="generate-button" onClick={handleGenerate}>
               Generate
             </button>
-            {loading && <div className="loader">Loading...</div>}
+            {loading && <div className="loader"></div>}
           </div>
         </div>
         <div className="generated-video-box">
           <div className="video-title">Generated Video</div>
-          {/* <div className="video-content">
+          <div className="video-content">
             {generatedVideo ? (
               <video controls>
                 <source src={generatedVideo} type="video/mp4" />
@@ -194,17 +158,7 @@ const Application = () => {
             ) : (
               <div className="video-placeholder">Video will be displayed here</div>
             )}
-          </div> */}
-          {loading ? (
-            <video controls>
-              <source src={generatedVideo} type="videp/mp4" />
-            </video>
-          ) : (
-            <div className="video-placeholder">
-              video will be displayed here
-            </div>
-          )}
-
+          </div>
         </div>
       </div>
     </div>

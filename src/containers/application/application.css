@@ -270,6 +270,30 @@
     animation: spin 2s linear infinite;
 }
 
+
+/* Styling for select elements */
+select {
+    width: 50%;
+    padding: 6px;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Styling for options within select */
+  select option {
+    font-size: 11px;
+    background-color: white;
+    padding: 4px;
+  }
+  
+  /* Hover effect for options */
+  select option:hover {
+    background-color: #e0e0e0;
+  }
+
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
