@@ -15,7 +15,7 @@ const App = () => (
     <WhatVGA />
     <Features />
     <Application />
-    <Team />
+    {/* <Team /> */}
     <Blog />
     <Footer />
   </div>
